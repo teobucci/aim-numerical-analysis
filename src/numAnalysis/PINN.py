@@ -52,24 +52,10 @@ Information on the NN
         return s
 
     def loss_fit(self,points):
-        '''
-        Using tf.reduce_mean and tf.square
-        create the MSE for the interpolation loss
-        
-        pseudo code:
-        MSE = 1/(nr points)*sum_(x,y \in points)(model(x,y)-u_ex(x,y))^2
-        
-        create the MSE for the interpolation loss
-        create the MSE for the interpolation loss
-
-        HINTS:
-        self(points.xy) evaluate the NN in points
-        self.u_ex(points.x,points.y) evaluate u_ex in points
-
-        Be sure they have the same shape!
-
-        self.last_loss_fit = ??
-        '''
+        model_evaluation = tf.reshape(self(points.xy),              (points.x.shape[0],))
+        exact_evaluation = tf.reshape(self.u_ex(points.x,points.y), (points.x.shape[0],))
+        #print("Debugging, shapes are {} and {}".format(model_evaluation.shape, exact_evaluation.shape))
+        self.last_loss_fit = tf.reduce_mean(tf.square(model_evaluation - exact_evaluation))
         return self.last_loss_fit
 
     def fit(self, points, log, num_epochs=100):
