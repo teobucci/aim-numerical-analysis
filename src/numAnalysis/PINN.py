@@ -39,9 +39,17 @@ class NN:
         return self.model(val)
 
     def __repr__(self):
-        ''' Make a method to print the number of layers,
-            neaurons, activation function, optimizer
-            and learning rate of the NN'''
+        s = f'''
+{'-'*40}
+Information on the NN
+# number of layers: {self.n_layers}
+# number of neurons (per layer): {self.n_neurons}
+# activation function: {self.activation}
+# optimizer: {self.optimizer}
+# learning rate: {self.learning_rate}
+{'-'*40}
+'''
+        return s
 
     def loss_fit(self,points):
         '''
