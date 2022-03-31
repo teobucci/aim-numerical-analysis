@@ -22,16 +22,11 @@ class NN:
                        learning_rate = 1e-3,
                        opt = tf.keras.optimizers.Adam):
 
-        '''
-        Your code goes here
-
-        Hints:
-
-        self.hidden_layers =  ? Make a list of dense layers as n_hidden_layers with n_neurons each
-        self.layers =  ?
-
-        Keep this:
-        '''
+        self.hidden_layers = [Dense(units=n_neurons, activation=activation) for _ in range(n_layers)]
+        self.layers = [Dense(units=n_neurons, input_shape=(2,), activation=activation), *self.hidden_layers, Dense(1)]
+        self.activation = activation
+        self.n_layers = n_layers
+        self.n_neurons = n_neurons
 
         self.model = tf.keras.Sequential(self.layers)
         self.last_loss_fit = tf.constant([0.0])
