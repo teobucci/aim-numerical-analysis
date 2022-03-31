@@ -59,11 +59,12 @@ Information on the NN
         return self.last_loss_fit
 
     def fit(self, points, log, num_epochs=100):
-        '''
-        Create una routine che minimizzi la loss fit
-        e mostri il tempo impiegato
-        '''
-        return
+        initial_time = time.time()
+        for i in range(num_epochs):
+            self.optimizer.minimize(loss = lambda: self.loss_fit(points), var_list = self.model.variables)
+            print('epoch: {}\tloss_fit: {}'.format(i, self.last_loss_fit.numpy()))
+        print('elapsed time: {} s'.format(time.time() - initial_time), file=log)
+        return self
 
 class PINN(NN):
 
