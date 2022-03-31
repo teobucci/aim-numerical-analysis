@@ -112,6 +112,9 @@ class PINN(NN):
         return self.last_loss_PDE
 
     def fit(self,points_int,points_pde,log,num_epochs=100):
-        '''
-        Allena la rete usando sia la loss_fit che la loss_PDE
-        '''
+        initial_time = time.time()
+        for i in range(num_epochs):
+            self.optimizer.minimize(loss = lambda: self.loss_fit(points_int) + self.loss_PDE(points_pde), var_list = self.trainable_variables)
+            print('epoch: {}\tloss_fit: {}\tloss_pde: {}\ttotal_los: {}'.format(i, self.last_loss_fit.numpy(), self.last_loss_PDE.numpy(), self.last_loss_fit.numpy()+self.last_loss_PDE.numpy()))
+        print('elapsed time: {} s'.format(time.time() - initial_time), file=log)
+        return self
