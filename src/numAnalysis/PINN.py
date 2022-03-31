@@ -93,24 +93,23 @@ class PINN(NN):
 
 
     def loss_PDE(self, points):
-        '''
-        Definite la lossPde del Laplaciano
-        Guardate le slide per vedere come definire la PDE del Laplaciano
-        
-        Hints:
+
         x = tf.constant(points.x)
         y = tf.constant(points.y)
-        with ...
-            ...
-            ...
+        with tf.GradientTape(persistent = True) as tape:
+            tape.watch(x)
+            tape.watch(y)
             u = self.model(tf.stack((x,y),axis=1))
-            u_x = ...
-            u_y = ...
-            u_xx = ...
-            u_yy = ...
-        self.last_loss_PDE = tf.reduce_mean(tf.square(-self.mu*(u_xx+u_yy)-tf.reshape(u,(x.shape[0],))))
+            u_x = tape.gradient(u,x)
+            u_y = tape.gradient(u,y)
+            u_xx = tape.gradient(u_x,x)
+            u_yy = tape.gradient(u_y,y)
+
+        pde_evaluation_lap = tf.reshape(self.mu*(u_xx+u_yy),(x.shape[0],))
+        pde_evaluation_u   = tf.reshape(u,(x.shape[0],))
+        # print("Debugging, shapes are {} and {}".format(pde_evaluation_lap.shape, pde_evaluation_u.shape))
+        self.last_loss_PDE = tf.reduce_mean(tf.square(pde_evaluation_lap + pde_evaluation_u))
         return self.last_loss_PDE
-        '''
 
     def fit(self,points_int,points_pde,log,num_epochs=100):
         '''
