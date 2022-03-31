@@ -30,7 +30,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # L'equazione che andremo a risolvere e' un equazione di Laplace con
 # termine di reazione in R^2 ossia:
-# -mu*Laplaciano(u) + u = 0
+# mu*Laplaciano(u) + u = 0
 
 # Una rete neurale e', nel nostro caso, un modello di Machine Learning
 # che permette di interpolare dei dati. I dati in questo caso coincidono
@@ -89,7 +89,7 @@ u_ex = lambda x, y: np.cos(x/np.sqrt(mu_exact)) \
 train_points = grid(NN_params[1]["num_train_points"]) # Punti di interpolazione
 pde_points   = grid(NN_params[1]["num_pde_points"])   # Punti in qui valutiamo l'equazione
 test_points  = grid(NN_params[1]["num_test_points"])  # Punti in cui verifichiamo la vicinanza tra PINN
-u_test       = u_ex(test_points.x, test_points.y)     # e soluzoone esatta
+u_test       = u_ex(test_points.x, test_points.y)     # e soluzione esatta
 
 ############################################################################
 ### Punto 1
