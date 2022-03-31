@@ -77,20 +77,19 @@ class PINN(NN):
                        mu = tf.Variable(1.0),
                        inverse = False):
 
-        '''
-        Build father class
-        '''
-        self.mu = mu
-        self.last_loss_PDE = tf.constant([0.0]);
-        self.trainable_variables = [self.model.variables]
-        if inverse:
-          '''
-          Aggiungi self.mu alle trainable variables
-          (oltre alle model.variables) quando
-          vogliamo risolvere il problema inverso
+        # father class
+        super().__init__(u_ex, n_layers,
+                       n_neurons,
+                       activation,
+                       dim,
+                       learning_rate,
+                       opt)
 
-          self.trainable_variables = ?
-          '''
+        self.mu = mu
+        self.last_loss_PDE = tf.constant([0.0])
+        self.trainable_variables = [*self.model.variables]
+        if inverse:
+            self.trainable_variables = [*self.trainable_variables, self.mu]
 
 
     def loss_PDE(self, points):
