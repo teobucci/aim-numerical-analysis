@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.getcwd())
 
-print("cominciamo")
+# print("cominciamo")
 
 import numpy as np
 import tensorflow as tf
