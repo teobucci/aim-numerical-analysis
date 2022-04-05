@@ -23,7 +23,9 @@ class NN:
                        opt = tf.keras.optimizers.Adam):
 
         self.hidden_layers = [Dense(units=n_neurons, activation=activation) for _ in range(n_layers)]
-        self.layers = [Dense(units=n_neurons, input_shape=(2,), activation=activation), *self.hidden_layers, Dense(1)]
+        self.layers = [Dense(units=n_neurons, input_shape=(dim,), activation=activation),
+                       *self.hidden_layers,
+                       Dense(1)]
         self.activation = activation
         self.n_layers = n_layers
         self.n_neurons = n_neurons
@@ -63,7 +65,10 @@ Information on the NN
         for i in range(num_epochs):
             self.optimizer.minimize(loss = lambda: self.loss_fit(points), var_list = self.model.variables)
             print('epoch: {}\tloss_fit: {}'.format(i, self.last_loss_fit.numpy()))
+        
+        print('\nNN report:', file=log)
         print('elapsed time: {} s'.format(time.time() - initial_time), file=log)
+        print('loss_fit: {}'.format(self.loss_fit(points)), file=log)
         return self
 
 class PINN(NN):
@@ -116,5 +121,8 @@ class PINN(NN):
         for i in range(num_epochs):
             self.optimizer.minimize(loss = lambda: self.loss_fit(points_int) + self.loss_PDE(points_pde), var_list = self.trainable_variables)
             print('epoch: {}\tloss_fit: {}\tloss_pde: {}\ttotal_los: {}'.format(i, self.last_loss_fit.numpy(), self.last_loss_PDE.numpy(), self.last_loss_fit.numpy()+self.last_loss_PDE.numpy()))
+        print('\nPINN report:', file=log)
         print('elapsed time: {} s'.format(time.time() - initial_time), file=log)
+        print('loss_fit: {}'.format(self.loss_fit(points_int)), file=log)
+        print('loss_PDE: {}'.format(self.loss_PDE(points_pde)), file=log)
         return self
